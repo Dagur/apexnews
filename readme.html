@@ -1,0 +1,138 @@
+<html>
+<head>
+<title>ApexNews readme</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<style type="text/css">
+<!--
+.head {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 18px; font-weight: bold; color: #0099FF}
+body {  font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #000000}
+-->
+</style>
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000">
+<table width="85%" border="1" cellspacing="0" cellpadding="5" align="center" bordercolor="#000000">
+  <tr> 
+    <td> 
+      <div align="center"><b class="head">ApexNews installation</b></div>
+      <p>I'll try to make this short and sweet because I don't like making readme's 
+        (and this is my first one). I'll also try to make it so everybody can 
+        understand, not just hardened CGI gurus. If you're having any problems 
+        then please visit our support boards (<a href="http://www.sonicbarrier.net/apexboard/ikonboard.cgi">http://www.sonicbarrier.net/apexboard/ikonboard.cgi</a>) 
+        and ask. No question is too dumb. I'm also offering temporary e-mail support 
+        but I'm not promising prompt answers. My e-mail address is (<a href="mailto:dagur@sonicbarrier.net">dagur@sonicbarrier.net</a>).</p>
+      <p>What you need before installing is:</p>
+      <ol>
+        <li> Webspace with CGI support. (Only a few free hosting company's support 
+          CGI so check before<br>
+          trying to install)</li>
+        <li> You need to know how to do the following things with your ftp client:</li>
+      </ol>
+      <ul>
+        <li> Upload in binary and ASCII modes</li>
+        <li> 
+          <p> And if you're on a UNIX server (most are) you need to know how<br>
+            to set permissions (CHMOD). This is not a complicated thing to do<br>
+            and almost all ftp programs can do this. Most of the time you can<br>
+            simply right-click on the file you want to chmod and then choose<br>
+            the attributes.</p>
+        </li>
+      </ul>
+      <p>Ok now let's get our hands dirty. The first thing you need to do is edit 
+        the first line in 'apexnews.cgi' and 'setup.cgi'. By default it says &quot;<b>#!/usr/bin/perl</b>&quot;. 
+        Now this will work on most servers but not all. If this line is incorrect 
+        you will get an error (500) instantly when trying to run those files. 
+        If you don't know what the first line should be then it's usually easy 
+        to obtain that information on the hosts website. I can't help<br>
+        you with that.</p>
+      <p>Now it's time to upload. Notice that in your zipfile the files are kept 
+        in two main folders called 'CGI' and 'Images'. This is because they should 
+        be uploaded to two different places on the server. The images should be 
+        uploaded to an ordinary folder in <b>binary mode</b>. But the contents 
+        of the 'CGI' folder, the script itself and it's files, should be uploaded 
+        to a cgi enabled directory in <b>ASCII mode</b>. Usually there's already 
+        a directory on your webspace called &quot;cgi-bin&quot;, you should use 
+        that. If there is none you should create one. Make sure it's chmoded 777. 
+        Now you should upload the content's of the 'CGI' folder into the cgi-bin. 
+        I recommend creating a special folder inside the cgi-bin folder for those 
+        files. Note: All folders inside the cgi-bin should be chmoded 777 (if 
+        your server doesn't allow that then 755 should be fine). </p>
+      <p>Now that you've uploaded the files you must chmod the following files 
+        <b>755</b>:</p>
+      <ul>
+        <li>apexnews.cgi</li>
+        <li>setup.cgi</li>
+        <li>textfiles/default.txt</li>
+        <li>styles/default.htm</li>
+      </ul>
+      <p>You're almost finished. Now you only need to run setup.cgi with your 
+        browser and follow the instructions there.</p>
+      <p>Now try posting something, if that works it's on to the final part of 
+        the installation:</p>
+      <p class="head" align="center">SSI</p>
+      <p>Important:</p>
+      <ol>
+        <li> not all servers allow SSI but most of those who allow CGI also allow 
+          SSI. </li>
+        <li> The html files in which you use SSI will probably have to have the 
+          extension '<b>.shtml</b>' <br>
+          (e.g. index.shtml instead of index.html) because few servers allow SSI 
+          in files with <br>
+          the '.html' or '.htm' extensions.</li>
+      </ol>
+      <p><br>
+        This version of ApexNews creates .txt files for the output and puts them 
+        in the 'textfiles' directory. The textfiles have the same name as your 
+        profiles. For example, you have a 'default' profile when you install the 
+        script so all output for that profile is in a file called 'default.txt'. 
+        Now you need to include the files into your html files using 'Server Side 
+        Includes' (or just SSI). These are special tags you can put anywhere in 
+        your html and the next time you view your html page on your server you 
+        will see the contents of your textfile there.</p>
+      <p>SSI can be a headache for people who are not used to them so it's often 
+        trial and error that is needed. Let's create a scenario:</p>
+      <p>Let's say that ApexNews is installed in'http://www.somesite.com/cgi-bin/ApexNews' 
+        (URL not absolute path) and your hompage is at 'http://www.somesite.com' 
+        Then we would add this tag to the html file:</p>
+      <p align="left"> &lt;!--#include virtual=&quot;<b>/cgi-bin/ApexNews/textfiles/default.txt</b>&quot; 
+        --&gt;<br>
+        or<br>
+        &lt;!--#include virtual=&quot;<b>cgi-bin/ApexNews/textfiles/default.txt</b>&quot; 
+        --&gt; </p>
+      <p align="left">If it's default.txt that you want to include. Notice that 
+        the path in the SSI tag is <b>relative to the html file</b>!</p>
+      <p align="left">Troubleshooting:</p>
+      <ol>
+        <li> 
+          <div align="left">If you get a [An error occurred while processing this 
+            directive] this means that the path is wrong. Try different variations 
+            but it that doesn't work try to use 'file' instead of virtual. The 
+            difference between these two is that file uses the absolute path but 
+            not the URL. So try either<br>
+            <br>
+            &lt;!--#include file=&quot;<b>cgi-bin/ApexNews/textfiles/default.txt</b>&quot; 
+            --&gt; (no forward slash in front)<br>
+            or<br>
+            &lt;!--#include virtual=&quot;<b>/home/public_html/cgi-bin/ApexNews/texfiles/default.txt</b>&quot; 
+            --&gt; (The full path to default.txt. Starts with a forward slash)</div>
+        </li>
+        <li>If you get nothing check the source of your page and see if the SSI 
+          tag is still there. If so it probably means that your host doesn't allow 
+          SSI. It could also mean that you have the wrong extension on your file 
+          (remember that <b>.shtml</b> is most common). If the tag is not there 
+          you should check your default.txt file and see if it has any contents. 
+          If not then post something in your Admin CP. </li>
+      </ol>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <div align="center">
+        <p align="center"><i><font face="Georgia, Times New Roman, Times, serif" size="1">Copyright 
+          2001 ApexNews</font></i></p>
+      </div>
+    </td>
+  </tr>
+</table>
+<p>&nbsp;</p></body>
+</html>
